@@ -1,17 +1,17 @@
-// IF EXISTS(select* from tempdb..sysobjects where id=OBJECT_ID('tempdb..#Sales')and xtype='U') DROP TABLE #Sales
-// GO
-// IF EXISTS(select* from tempdb..sysobjects where id=OBJECT_ID('tempdb..#SalesPriceDates')and xtype='U') DROP TABLE #SalesPriceDates
-// GO
-// IF EXISTS(select* from tempdb..sysobjects where id=OBJECT_ID('tempdb..#Rests')and xtype='U') DROP TABLE #Rests
-// GO
-// IF EXISTS(select* from tempdb..sysobjects where id=OBJECT_ID('tempdb..#SalesRests')and xtype='U') DROP TABLE #SalesRests
-// GO
-// IF EXISTS(select* from tempdb..sysobjects where id=OBJECT_ID('tempdb..#ReceiptDates')and xtype='U') DROP TABLE #ReceiptDates
-// GO
+IF EXISTS(select* from tempdb..sysobjects where id=OBJECT_ID('tempdb..#Sales')and xtype='U') DROP TABLE #Sales
+GO
+IF EXISTS(select* from tempdb..sysobjects where id=OBJECT_ID('tempdb..#SalesPriceDates')and xtype='U') DROP TABLE #SalesPriceDates
+GO
+IF EXISTS(select* from tempdb..sysobjects where id=OBJECT_ID('tempdb..#Rests')and xtype='U') DROP TABLE #Rests
+GO
+IF EXISTS(select* from tempdb..sysobjects where id=OBJECT_ID('tempdb..#SalesRests')and xtype='U') DROP TABLE #SalesRests
+GO
+IF EXISTS(select* from tempdb..sysobjects where id=OBJECT_ID('tempdb..#ReceiptDates')and xtype='U') DROP TABLE #ReceiptDates
+GO
 
-SQL
+-- SQL
 SELECT 
-// TOP 100
+TOP 100
 	Warehouses._Fld540RRef AS storeRef,
 	Warehouses._Fld539RRef AS OrgRef,
 	DATEADD(DAY, DATEPART(DAY, _AccumReg2210._Period) - 1, DATEADD(MONTH, DATEPART(MONTH, _AccumReg2210._Period) - 1, DATEADD(YEAR, DATEPART(YEAR, _AccumReg2210._Period) - 2000, '2000-01-01 00:00:00'))) AS Period,
@@ -556,16 +556,16 @@ ORDER BY
 	ISNULL(ObjectProperties2._Description, ''),
 	ISNULL(ObjectProperties1._Description, '')
 
-;
+-- ;
 
-// DROP TABLE #Sales
-// GO
-// DROP TABLE #SalesPriceDates
-// GO
-// DROP TABLE #Rests
-// GO
-// DROP TABLE #SalesRests
-// GO
-// DROP TABLE #ReceiptDates
-// GO
-// ;
+DROP TABLE #Sales
+GO
+DROP TABLE #SalesPriceDates
+GO
+DROP TABLE #Rests
+GO
+DROP TABLE #SalesRests
+GO
+DROP TABLE #ReceiptDates
+GO
+-- ;
