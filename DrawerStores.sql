@@ -22,7 +22,7 @@ FROM
 GROUP BY
          sr.place_uid;
 
-SELECT TOP 1000
+SELECT --TOP 1000
        sd.place_uid,
        s.code,
        s.name,
