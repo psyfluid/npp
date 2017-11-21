@@ -11,7 +11,7 @@ IF EXISTS
     DROP TABLE #DrawerRests;
 GO
 
-SELECT --TOP 1000
+SELECT 
        sr.[date] AS date,
        sr.place_uid AS place_uid,
        sr.item_uid AS item_uid,
@@ -22,8 +22,6 @@ INTO
 FROM
      drawer.dbo.ShopRest sr
 WHERE   sr.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
-        --AND sr.place_uid = 0xAFC87DCCCDF31846454406A5E60F4412
-        --AND sr.item_uid = 0x9324275AA90776894DC9705C34887DEB
 UNION ALL
 SELECT TOP 1000
        sa.[date],
@@ -34,8 +32,6 @@ SELECT TOP 1000
 FROM
      drawer.dbo.ShopAdjust sa
 WHERE   sa.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
-        --AND sa.place_uid = 0xAFC87DCCCDF31846454406A5E60F4412
-        --AND sa.item_uid = 0x9324275AA90776894DC9705C34887DEB
 UNION ALL
 SELECT TOP 1000
        ss.[date],
@@ -46,8 +42,6 @@ SELECT TOP 1000
 FROM
      drawer.dbo.ShopSupply ss
 WHERE   ss.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
-        --AND ss.place_uid = 0xAFC87DCCCDF31846454406A5E60F4412
-        --AND ss.item_uid = 0x9324275AA90776894DC9705C34887DEB
 UNION ALL
 SELECT TOP 1000
        sti.[date],
@@ -58,8 +52,6 @@ SELECT TOP 1000
 FROM
      drawer.dbo.ShopTransIn sti
 WHERE   sti.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
-        --AND sti.place_uid = 0xAFC87DCCCDF31846454406A5E60F4412
-        --AND sti.item_uid = 0x9324275AA90776894DC9705C34887DEB
 UNION ALL
 SELECT TOP 1000
        ssr.[date],
@@ -70,8 +62,6 @@ SELECT TOP 1000
 FROM
      drawer.dbo.ShopSaleReturn ssr
 WHERE  ssr.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())));
-       --AND ssr.place_uid = 0xAFC87DCCCDF31846454406A5E60F4412
-       --AND ssr.item_uid = 0x9324275AA90776894DC9705C34887DEB;
 
 SELECT
        #DrawerRests.date,
