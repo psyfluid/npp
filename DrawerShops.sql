@@ -15,7 +15,7 @@ SELECT TOP 1000
        sr.[date] AS date,
        sr.place_uid AS place_uid,
        sr.item_uid AS item_uid,
-       ISNULL(sr.size, '') AS size,
+       ISNULL(sr.size, 0) AS size,
        ISNULL(sr.[value], 0) AS value
 INTO
      #DrawerRests
@@ -29,7 +29,7 @@ SELECT TOP 1000
        sa.[date],
        sa.place_uid,
        sa.item_uid,
-       ISNULL(sa.size, ''),
+       ISNULL(sa.size, 0),
        ISNULL(sa.[value], 0)
 FROM
      drawer.dbo.ShopAdjust sa
@@ -41,7 +41,7 @@ SELECT TOP 1000
        ss.[date],
        ss.place_uid,
        ss.item_uid,
-       ISNULL(ss.size, ''),
+       ISNULL(ss.size, 0),
        ISNULL(ss.[value], 0)
 FROM
      drawer.dbo.ShopSupply ss
@@ -53,7 +53,7 @@ SELECT TOP 1000
        sti.[date],
        sti.place_uid,
        sti.item_uid,
-       ISNULL(sti.size, ''),
+       ISNULL(sti.size, 0),
        ISNULL(sti.[value], 0)
 FROM
      drawer.dbo.ShopTransIn sti
@@ -65,7 +65,7 @@ SELECT TOP 1000
        ssr.[date],
        ssr.place_uid,
        ssr.item_uid,
-       ISNULL(ssr.size, ''),
+       ISNULL(ssr.size, 0),
        ISNULL(ssr.[value], 0)
 FROM
      drawer.dbo.ShopSaleReturn ssr
