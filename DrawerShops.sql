@@ -1,4 +1,5 @@
 
+
 IF EXISTS
 (
     SELECT
@@ -11,7 +12,7 @@ IF EXISTS
     DROP TABLE #DrawerRests;
 GO
 
-SELECT 
+SELECT
        sr.[date] AS date,
        sr.place_uid AS place_uid,
        sr.item_uid AS item_uid,
@@ -21,9 +22,11 @@ INTO
      #DrawerRests
 FROM
      drawer.dbo.ShopRest sr
-WHERE   sr.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
+WHERE   sr.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, GETDATE())
+
 UNION ALL
-SELECT TOP 1000
+
+SELECT 
        sa.[date],
        sa.place_uid,
        sa.item_uid,
@@ -31,9 +34,11 @@ SELECT TOP 1000
        ISNULL(sa.[value], 0)
 FROM
      drawer.dbo.ShopAdjust sa
-WHERE   sa.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
+WHERE   sa.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, GETDATE())
+
 UNION ALL
-SELECT TOP 1000
+
+SELECT 
        ss.[date],
        ss.place_uid,
        ss.item_uid,
@@ -41,9 +46,11 @@ SELECT TOP 1000
        ISNULL(ss.[value], 0)
 FROM
      drawer.dbo.ShopSupply ss
-WHERE   ss.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
+WHERE   ss.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, GETDATE())
+
 UNION ALL
-SELECT TOP 1000
+
+SELECT 
        sti.[date],
        sti.place_uid,
        sti.item_uid,
@@ -51,9 +58,11 @@ SELECT TOP 1000
        ISNULL(sti.[value], 0)
 FROM
      drawer.dbo.ShopTransIn sti
-WHERE   sti.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
+WHERE   sti.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, GETDATE())
+
 UNION ALL
-SELECT TOP 1000
+
+SELECT 
        ssr.[date],
        ssr.place_uid,
        ssr.item_uid,
@@ -61,7 +70,7 @@ SELECT TOP 1000
        ISNULL(ssr.[value], 0)
 FROM
      drawer.dbo.ShopSaleReturn ssr
-WHERE  ssr.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())));
+WHERE  ssr.[date] >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, GETDATE());
 
 SELECT
        #DrawerRests.date,
