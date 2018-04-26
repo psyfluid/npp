@@ -1,4 +1,4 @@
-SELECT TOP 100
+SELECT TOP 1000
        Warehouses._Fld540RRef AS storeRef,
        Warehouses._Fld539RRef AS OrgRef,
        DATEADD(DAY, DATEPART(DAY, _AccumReg2210._Period) - 1, DATEADD(MONTH, DATEPART(MONTH, _AccumReg2210._Period) - 1, DATEADD(YEAR, DATEPART(YEAR, _AccumReg2210._Period) - 2000, '2000-01-01 00:00:00'))) AS Period,
