@@ -2,25 +2,25 @@
 SELECT
        CAST(2 AS NUMERIC(1, 0)) AS _RecType,
        CONVERT(DATE, _AccumReg2245._Period) AS _Period,
-       _AccumReg2245._Fld2246RRef AS f_4,
-       _AccumReg2245._Fld2247RRef AS f_5,
-       _AccumReg2245._Fld2248RRef AS f_6,
-       0 AS _Fld2249Balance,
+       _AccumReg2245._Fld2246RRef AS warehouseRef,
+       _AccumReg2245._Fld2247RRef AS goodsRef,
+       _AccumReg2245._Fld2248RRef AS characteristicRef,
+       0 AS Balance,
        CAST(SUM(CASE
                     WHEN _AccumReg2245._RecordKind = 0
                     THEN _AccumReg2245._Fld2249
                     ELSE-_AccumReg2245._Fld2249
-                END) AS NUMERIC(21, 3)) AS _Fld2249Turnover,
+                END) AS NUMERIC(21, 3)) AS Turnover,
        CAST(SUM(CASE
                     WHEN _AccumReg2245._RecordKind = 0
                     THEN _AccumReg2245._Fld2249
                     ELSE 0
-                END) AS NUMERIC(21, 3)) AS _Fld2249Receipt,
+                END) AS NUMERIC(21, 3)) AS Receipt,
        CAST(SUM(CASE
                     WHEN _AccumReg2245._RecordKind = 0
                     THEN 0
                     ELSE _AccumReg2245._Fld2249
-                END) AS NUMERIC(21, 3)) AS _Fld2249Expense
+                END) AS NUMERIC(21, 3)) AS Expense
 FROM
      _AccumReg2245 WITH (NOLOCK)
      LEFT OUTER JOIN _Reference39 WITH (NOLOCK)
@@ -55,23 +55,20 @@ UNION ALL
 SELECT
        CAST(1 AS NUMERIC(1, 0)) AS _RecType,
        DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE()))) AS _Period,
-       #V8TblAli1_T._Fld2246RRef AS f_7,
-       #V8TblAli1_T._Fld2247RRef AS f_8,
-       #V8TblAli1_T._Fld2248RRef AS f_9,
-       CAST(SUM(#V8TblAli1_T._Fld2249Balance) AS NUMERIC(28, 3)) AS _Fld2249Balance,
-       CAST(CAST(SUM(#V8TblAli1_T._Fld2249Turnover) AS NUMERIC(14, 0)) AS NUMERIC(22, 3)) AS _Fld2249Turnover,
-       CAST(CAST(SUM(#V8TblAli1_T._Fld2249Receipt) AS NUMERIC(14, 0)) AS NUMERIC(22, 3)) AS _Fld2249Receipt,
-       CAST(CAST(SUM(#V8TblAli1_T._Fld2249Expense) AS NUMERIC(14, 0)) AS NUMERIC(22, 3)) AS _Fld2249Expense
+       TT_AccumRegTotals2250.warehouseRef AS warehouseRef,
+       TT_AccumRegTotals2250.goodsRef AS goodsRef,
+       TT_AccumRegTotals2250.characteristicRef AS characteristicRef,
+       CAST(SUM(TT_AccumRegTotals2250._Fld2249Balance) AS NUMERIC(28, 3)) AS Balance,
+       SUM(0) AS Turnover,
+       SUM(0) AS Receipt,
+       SUM(0) AS Expense
 FROM
 (
     SELECT
-           _AccumRegTotals2250._Fld2246RRef AS _Fld2246RRef,
-           _AccumRegTotals2250._Fld2247RRef AS _Fld2247RRef,
-           _AccumRegTotals2250._Fld2248RRef AS _Fld2248RRef,
-           CAST(_AccumRegTotals2250._Fld2249 AS NUMERIC(22, 3)) AS _Fld2249Balance,
-           0 AS _Fld2249Turnover,
-           0 AS _Fld2249Receipt,
-           0 AS _Fld2249Expense
+           _AccumRegTotals2250._Fld2246RRef AS warehouseRef,
+           _AccumRegTotals2250._Fld2247RRef AS goodsRef,
+           _AccumRegTotals2250._Fld2248RRef AS characteristicRef,
+           CAST(_AccumRegTotals2250._Fld2249 AS NUMERIC(22, 3)) AS Balance
     FROM
          _AccumRegTotals2250 WITH (NOLOCK)
          LEFT OUTER JOIN _Reference39 WITH (NOLOCK)
@@ -84,17 +81,14 @@ FROM
             AND _AccumRegTotals2250._Fld2249 <> 0
     UNION ALL
     SELECT
-           _AccumReg2245._Fld2246RRef AS _Fld2246RRef,
-           _AccumReg2245._Fld2247RRef AS _Fld2247RRef,
-           _AccumReg2245._Fld2248RRef AS _Fld2248RRef,
+           _AccumReg2245._Fld2246RRef AS warehouseRef,
+           _AccumReg2245._Fld2247RRef AS goodsRef,
+           _AccumReg2245._Fld2248RRef AS characteristicRef,
            CAST(SUM(CASE
                         WHEN _AccumReg2245._RecordKind = 0
                         THEN-_AccumReg2245._Fld2249
                         ELSE _AccumReg2245._Fld2249
-                    END) AS NUMERIC(21, 3)) AS _Fld2249Balance,
-           0 AS _Fld2249Turnover,
-           0 AS _Fld2249Receipt,
-           0 AS _Fld2249Expense
+                    END) AS NUMERIC(21, 3)) AS Balance
     FROM
          _AccumReg2245 WITH (NOLOCK)
          LEFT OUTER JOIN _Reference39 WITH (NOLOCK)
@@ -115,18 +109,16 @@ FROM
                         THEN-_AccumReg2245._Fld2249
                         ELSE _AccumReg2245._Fld2249
                     END) AS NUMERIC(21, 3)) <> 0
-) #V8TblAli1_T
+) TT_AccumRegTotals2250
 GROUP BY
-         #V8TblAli1_T._Fld2246RRef,
-         #V8TblAli1_T._Fld2247RRef,
-         #V8TblAli1_T._Fld2248RRef
-HAVING CAST(SUM(#V8TblAli1_T._Fld2249Balance) AS NUMERIC(28, 3)) <> 0
-       OR CAST(SUM(#V8TblAli1_T._Fld2249Turnover) AS NUMERIC(14, 0)) <> 0
-       OR CAST(SUM(#V8TblAli1_T._Fld2249Receipt) AS NUMERIC(14, 0)) <> 0
-       OR CAST(SUM(#V8TblAli1_T._Fld2249Expense) AS NUMERIC(14, 0)) <> 0
+         TT_AccumRegTotals2250._Fld2246RRef,
+         TT_AccumRegTotals2250._Fld2247RRef,
+         TT_AccumRegTotals2250._Fld2248RRef
+HAVING CAST(SUM(TT_AccumRegTotals2250._Fld2249Balance) AS NUMERIC(28, 3)) <> 0
+
 ORDER BY
-         f_4,
-         f_5,
-         f_6,
+         warehouseRef,
+         goodsRef,
+         characteristicRef,
          _Period,
          _RecType;
