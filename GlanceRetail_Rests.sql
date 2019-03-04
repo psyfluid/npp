@@ -1,4 +1,35 @@
-﻿
+﻿IF EXISTS
+(
+    SELECT
+           *
+    FROM
+         tempdb..sysobjects
+    WHERE  id = OBJECT_ID('tempdb..#CalendarDates')
+           AND xtype = 'U'
+)
+    DROP TABLE #CalendarDates;
+GO
+
+IF EXISTS
+(
+    SELECT
+           *
+    FROM
+         tempdb..sysobjects
+    WHERE  id = OBJECT_ID('tempdb..#TT_TurnoverRests')
+           AND xtype = 'U'
+)
+    DROP TABLE #TT_TurnoverRests;
+GO
+
+SELECT
+	CONVERT(DATE, Calendar._Fld3065) AS CalendarDate
+INTO #CalendarDates
+FROM _InfoReg3064 AS Calendar
+WHERE Calendar._Fld3065 >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
+	AND Calendar._Fld3065 <= GETDATE()
+;
+
 SELECT
        CAST(2 AS NUMERIC(1, 0)) AS _RecType,
        CONVERT(DATE, _AccumReg2245._Period) AS _Period,
@@ -21,6 +52,7 @@ SELECT
                     THEN 0
                     ELSE _AccumReg2245._Fld2249
                 END) AS NUMERIC(21, 3)) AS Expense
+INTO #TT_TurnoverRests
 FROM
      _AccumReg2245 WITH (NOLOCK)
      LEFT OUTER JOIN _Reference39 WITH (NOLOCK)
@@ -121,4 +153,48 @@ ORDER BY
          goodsRef,
          characteristicRef,
          _Period,
-         _RecType;
+         _RecType
+
+;
+
+SELECT 
+	_Reference39._Fld540RRef AS storeRef,
+	#TT_TurnoverRests.goodsRef AS goodsRef,
+	#TT_TurnoverRests.characteristicRef AS characteristicRef,
+	#CalendarDates.CalendarDate AS CalendarDate,
+	CAST(SUM(CASE 
+				WHEN #TT_TurnoverRests._Period = DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
+					THEN #TT_TurnoverRests.Balance
+				ELSE CASE 
+						WHEN #TT_TurnoverRests._Period < #CalendarDates.CalendarDate
+							THEN #TT_TurnoverRests.Turnover
+						ELSE 0
+						END
+				END) AS NUMERIC(27, 3)) AS f_2
+
+FROM #CalendarDates 
+
+LEFT OUTER JOIN #TT_TurnoverRests
+	ON #TT_TurnoverRests._Period <= #CalendarDates.CalendarDate
+
+LEFT OUTER JOIN _Reference39 WITH (NOLOCK)
+	ON #TT_TurnoverRests.warehouseRef = _Reference39._IDRRef
+
+GROUP BY _Reference39._Fld540RRef,
+	#TT_TurnoverRests.goodsRef,
+	#TT_TurnoverRests.characteristicRef,
+	#CalendarDates.CalendarDate
+
+ORDER BY 
+	_Reference39._Fld540RRef,
+	#TT_TurnoverRests.goodsRef,
+	#TT_TurnoverRests.characteristicRef,
+	#CalendarDates.CalendarDate
+
+;
+
+DROP TABLE #CalendarDates;
+GO
+
+DROP TABLE #TT_TurnoverRests;
+GO

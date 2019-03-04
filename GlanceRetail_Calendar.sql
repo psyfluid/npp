@@ -1,5 +1,6 @@
 ﻿SELECT
 	CONVERT(DATE, Calendar._Fld3065) AS CalendarDate
+INTO #CalendarDates
 FROM _InfoReg3064 AS Calendar
 WHERE Calendar._Fld3065 >= DATEADD(DAY, -DATEPART(DAY, CONVERT(DATE, GETDATE())) + 1, DATEADD(MONTH, -1, CONVERT(DATE, GETDATE())))
 	AND Calendar._Fld3065 <= GETDATE()
