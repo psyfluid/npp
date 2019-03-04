@@ -58,7 +58,7 @@ SELECT
        TT_AccumRegTotals2250.warehouseRef AS warehouseRef,
        TT_AccumRegTotals2250.goodsRef AS goodsRef,
        TT_AccumRegTotals2250.characteristicRef AS characteristicRef,
-       CAST(SUM(TT_AccumRegTotals2250._Fld2249Balance) AS NUMERIC(28, 3)) AS Balance,
+       CAST(SUM(TT_AccumRegTotals2250.Balance) AS NUMERIC(28, 3)) AS Balance,
        SUM(0) AS Turnover,
        SUM(0) AS Receipt,
        SUM(0) AS Expense
@@ -111,10 +111,10 @@ FROM
                     END) AS NUMERIC(21, 3)) <> 0
 ) TT_AccumRegTotals2250
 GROUP BY
-         TT_AccumRegTotals2250._Fld2246RRef,
-         TT_AccumRegTotals2250._Fld2247RRef,
-         TT_AccumRegTotals2250._Fld2248RRef
-HAVING CAST(SUM(TT_AccumRegTotals2250._Fld2249Balance) AS NUMERIC(28, 3)) <> 0
+         TT_AccumRegTotals2250.warehouseRef,
+         TT_AccumRegTotals2250.goodsRef,
+         TT_AccumRegTotals2250.characteristicRef
+HAVING CAST(SUM(TT_AccumRegTotals2250.Balance) AS NUMERIC(28, 3)) <> 0
 
 ORDER BY
          warehouseRef,
